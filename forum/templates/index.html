@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="../public/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="profile-section">
+            {{ if .CLogged }}
+                <h1>{{ .CUsername }}</h1>
+                <a href="/create" class="nav-link">Create post</a>
+                <a href="/logout" class="nav-link">Log-out</a>
+            {{ else }}   
+                <h1>Forum</h1>
+                <a href="/signup" class="nav-link">Sign-up</a>
+                <a href="/signin" class="nav-link">Sign-in</a> 
+            {{ end }}    
+        </div>
+        <div class="content-section">
+            <div class="categories">
+                <a href="/people">People</a>
+                <a href="/school">School</a>
+                <a href="/tech">Tech</a>
+                <a href="/memes">Memes</a>
+                <a href="/q&a">Q&A</a>
+            </div>
+            {{ range .Cposts }}
+            <div class="post">
+                <h3>{{ .Title }}</h3>
+                <h6>by {{ .Creator }} in c/{{ .Category }}, {{ .Created }}</h6>
+                <p>{{ .Content }}</p>
+                <p>{{ .Likes }}  {{ .Dislikes }}</p>
+                <form action="/vote" method="POST">
+                    <input class ="like-button" type="submit" name="vote" value="Like">
+                    <input class="dislike-button" type="submit" name="vote" value="Dislike">
+                    <input type="hidden" name="post-id" value="{{ .ID }}">
+                    <input type="hidden" name="username" value="{{ .Creator }}">
+                </form>
+                {{ if $.CLogged }}
+                <form action="/post" method="GET">
+                    <input type="hidden" name="post" value="{{ .ID }}">
+                    <input class="comment-button" type="submit" name="submit-comment" value="Leave comment">
+                </form>
+                {{ else }}
+                <a href="/post?post={{.ID}}" method="GET" class="comment-button">See post</a>
+                {{ end }}
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="../public/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="profile-section">
+            {{ if .CLogged }}
+                <h1>{{ .CUsername }}</h1>
+                <a href="/">Main page</a>
+                <a href="/create">Create post</a>
+                <a href="/logout">Log-out</a>
+            {{ else }}   
+                <h1>Forum</h1>
+                <a href="/">Main page</a>
+                <a href="/signup">Sign-up</a>
+                <a href="/signin">Sign-in</a> 
+            {{ end }}    
+        </div>
+        <div class="content-section">
+            <div class="post">
+                <h1>{{ .Cpost.Title }}</h1>
+                <h6>by {{ .Cpost.Creator }} in c/{{ .Cpost.Category }}, {{ .Cpost.Created }}</h6>
+                <p>{{ .Cpost.Content }}</p>
+                <p>{{ .Cpost.Likes }}  {{ .Cpost.Dislikes }}</p>
+                <form action="/vote" method="POST">
+                    <input type="submit" name="vote" value="Like">
+                    <input type="submit" name="vote" value="Dislike">
+                    <input type="hidden" name="post-id" value="{{ .Cpost.ID }}">
+                    <input type="hidden" name="username" value="{{ .Cpost.Creator }}">
+                </form>
+                <form action="/post" method="POST">
+                    <textarea name="comment"></textarea>
+                    <input type="submit" id ="comment-button" value="Leave comment">
+                    <input type="hidden" name="username" value="{{.CUsername}}">
+                    <input type="hidden" name="post-id" value="{{ .Cpost.ID }}">
+                </form>
+            </div>
+            <div class ="comment-section">
+                {{ range .Ccomments }}
+                    <div class="comment">
+                        <h6>by {{ .Creator }} at {{ .Created }}</h6>
+                        <p>{{ .Content }}</p>
+                    </div>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+    <script>
+
+    </script>
+</body>
+</html>

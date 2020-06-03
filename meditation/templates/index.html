@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit tracker</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="../public/style.css">
+</head>
+<body>
+    <div class="cont">
+        <div class="nav">
+            <h1>My habits</h1>
+            <div class="progress-bars">
+                {{ range .Habits }}
+                <!-- <p>{{ .HabitName }}</p> -->
+                <h6>{{.HabitName}}</h6>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: {{ .Percent}}%" aria-valuenow="{{ .HabitDone}}%" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                {{ end }}
+            </div>
+            <div class="navigation">
+                <a href="/create" class="menu">Create a habit</a>
+                <a href="/logout" class="menu">Log-out</a>
+            </div>
+        </div>
+        <main>
+            {{ range .Habits }}
+                <div class="habit-container">
+                    <h2>{{ .HabitName }}</h2>
+                    <p>{{ .HabitInfo }}</p>
+                    <h3>{{ .HabitDone }}/{{ .HabitDays }}</h3>
+                    <h5>{{ .TimesDone }}/{{ .HabitTimes }}</h5>
+                    <form action="/add" method="POST">
+                        <input type="submit" class="add-button" value="+1">
+                        <input type="hidden" name="habit-user" value="{{ .HabitUser }}">
+                        <input type="hidden" name="habit-name" value="{{ .HabitName }}">
+                    </form>
+                </div>
+            {{ end }}
+        </main>
+    </div>
+</body>
+</html>
